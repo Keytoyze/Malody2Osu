@@ -1,0 +1,12 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDEA
+.idea/
+*.iml
+
+migrations/
+!migrations/__init__.py
+*.sqlite3
