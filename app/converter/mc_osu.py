@@ -1,6 +1,6 @@
 import json
 import bisect
-from app.info import Comparable
+from app.utils import Comparable
 from django.template import loader
 
 
@@ -46,7 +46,6 @@ def mc_osu_v14(mc: str, od=8, hp=7, vol=70, keep_sv=True):
         obj_parse(mc_json, context)
         translate(context)
         return str(loader.render_to_string('osu_v14.osu', context)), True
-
     except Exception as e:
         return e, False
 

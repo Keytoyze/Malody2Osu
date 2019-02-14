@@ -19,5 +19,6 @@ import app.views as views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path(r'map', views.convert_map)
+    path('upload', views.convert_map),
+    path('download', views.download)
 ]

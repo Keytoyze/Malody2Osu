@@ -7,6 +7,10 @@ __pycache__/
 .idea/
 *.iml
 
+# migrations
 migrations/
 !migrations/__init__.py
+
+# data
 *.sqlite3
+files/
