@@ -1,6 +1,7 @@
 import json
 import bisect
 from app.utils import Comparable
+from app import utils
 from django.template import loader
 
 
@@ -12,9 +13,9 @@ class BpmStamp(Comparable):
         self.time = time
 
     def translate(self, context):
-        return ",".join(list(map(str, [
+        return ",".join(list(map(lambda x: str(int(x)), [
             0 if self.time == 0 else self.time - context['offset'],
-            60000 / self.bpm, 4, 1, 0, context['vol'], 0, 0])))
+            60000 / self.bpm, 4, 2, 1, context['vol'], 1, 0])))
 
 
 class NoteStamp(Comparable):
@@ -29,7 +30,7 @@ class NoteStamp(Comparable):
         self.column = column
 
     def translate(self, context):
-        return ",".join(list(map(str, [
+        return ",".join(list(map(lambda x: str(int(x)), [
             (self.column * 2 + 1) * 64, 192, self.time - context['offset'],
             1 if self.end is None else 128, 0,
             0 if self.end is None else self.endtime - context['offset']
@@ -48,6 +49,14 @@ def mc_osu_v14(mc: str, od=8, hp=7, vol=70, keep_sv=True):
         return str(loader.render_to_string('osu_v14.osu', context)), True
     except Exception as e:
         return e, False
+
+def fmc_osu_v14(in_file, out_file, od=8, hp=7, vol=70, keep_sv=True):
+    source = utils.read_file(in_file)
+    re = mc_osu_v14(source, od, hp, vol, keep_sv)
+    if re[1]:
+        utils.write_file(re[0], out_file)
+    else:
+        raise re[0]
 
 
 def translate(context):
