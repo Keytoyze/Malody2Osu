@@ -2,8 +2,7 @@ from django.http import *
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-import app.utils as utils
-from app.converter import mc_osu
+from app.converter import mc_osu, mcz_osz
 from app.models import ConvModel
 
 
@@ -33,17 +32,18 @@ def convert_map(request):
             out_suffix = "osu"
             conv.out_file = name + "." + out_suffix
             out_name = conv.get_absolute(conv.out_file)
-            source = utils.read_file(in_name)
             # TODO: OD/HP/SV/VOL
-            re = mc_osu.mc_osu_v14(source)
-            if re[1]:
-                utils.write_file(re[0], out_name)
-            else:
-                raise re[0]
-            conv.result = True
+            mc_osu.fmc_osu_v14(in_name, out_name)
+
+        elif in_suffix == 'zip' or in_suffix == 'mcz':
+            out_suffix = "osz"
+            conv.out_file = name + "." + out_suffix
+            out_name = conv.get_absolute(conv.out_file)
+            # TODO: OD/HP/SV/VOL
+            mcz_osz.mcz_osz_v14(in_name, out_name)
         else:
-            # TODO: osz
             raise Exception("谱面格式(%s)未被支持" % in_suffix)
+        conv.result = True
         conv.save()
         response['msg'] = conv.conv_id
         response['code'] = 1
