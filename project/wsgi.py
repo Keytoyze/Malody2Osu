@@ -1,5 +1,5 @@
 """
-WSGI config for Malody2Osu project.
+WSGI config for Mania-Lab project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
