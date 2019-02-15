@@ -1,6 +1,13 @@
-# Malody2Osu
-Conversion tools for converting maps of Malody into OSU!
+# Mania-Lab
+A set of tools about MUG mania maps.
+
+## DONE
+- convert mc/mcz into osu/osz
+- very very simple web interface
 
 ## TODO
-- conversion algorithm
-- web interface
+- support more options about converting
+- support more maps type such as LR2, ett, RM...
+- change the speed of maps
+- convert into LN
+- nice web interface
