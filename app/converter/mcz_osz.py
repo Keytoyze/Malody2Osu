@@ -42,6 +42,12 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True):
                     pass
                 finally:
                     os.remove(file)
+            elif suffix == 'ogg':
+                print('ffmpeg -i "{}" -f mp3 "{}"'.format(file, name + ".mp3"))
+                os.system('ffmpeg -i "{}" -f mp3 "{}"'.format(file, name + ".mp3"))
+                os.remove(file)
+
+
 
 
 def zip_dir(dirpath, outname):

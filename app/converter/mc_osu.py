@@ -70,7 +70,12 @@ def gen_parse(mc: dict, context: dict):
     notes = mc['note']
     for i in range(len(notes) - 1, -1, -1):
         if 'sound' in notes[i]:
-            context['audio'] = notes[i]['sound']
+            file = notes[i]['sound']
+            suffix = file.rsplit(".", 1)[-1]
+            name = file.rsplit(".", 1)[0]
+            if suffix == 'ogg':
+                file = name + ".mp3"
+            context['audio'] = file
             context['offset'] = notes[i]['offset']
             break
     if 'audio' not in context:
