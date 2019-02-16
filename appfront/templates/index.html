@@ -27,7 +27,7 @@
       contentType: false,
       dataType: "json",
       beforeSend: function () {
-        $("#convert_button").value = "转换中……";
+        $("#convert_button").text("转换中……");
         uploading = true;
       },
       success: function (data) {
@@ -39,7 +39,7 @@
         } else {
           alert(data.msg);
         }
-        $("#convert_button").value = "一键转谱";
+        $("#convert_button").text("一键转谱");
         uploading = false;
       }
     });

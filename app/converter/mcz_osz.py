@@ -4,7 +4,7 @@ import traceback
 from app.converter import mc_osu
 
 
-def mcz_osz_v14(mcz_path, osz_path, od=8, hp=7, vol=70, keep_sv=True):
+def mcz_osz_v14(mcz_path, osz_path, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     global success_c
     try:
         d = mcz_path.rsplit(".", 1)[0]
@@ -12,7 +12,7 @@ def mcz_osz_v14(mcz_path, osz_path, od=8, hp=7, vol=70, keep_sv=True):
         zipfile.ZipFile(mcz_path).extractall(d)
 
         success_c = 0
-        convert(d, od, hp, vol, keep_sv)
+        convert(d, od, hp, vol, keep_sv, speed)
         if success_c == 0:
             raise Exception()
 
@@ -25,7 +25,7 @@ def mcz_osz_v14(mcz_path, osz_path, od=8, hp=7, vol=70, keep_sv=True):
 
 
 # noinspection PyBroadException,PyTypeChecker
-def convert(d, od=8, hp=7, vol=70, keep_sv=True):
+def convert(d, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     global success_c
     for file in os.listdir(d):
         file = os.path.join(d, file)
@@ -36,18 +36,17 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True):
             name = file.rsplit(".", 1)[0]
             if suffix == 'mc':
                 try:
-                    mc_osu.fmc_osu_v14(file, name + ".osu", od, hp, vol, keep_sv)
+                    mc_osu.fmc_osu_v14(file, name + ".osu", od, hp, vol, keep_sv, speed)
                     success_c += 1
                 except Exception:
+                    traceback.print_exc()
                     pass
                 finally:
                     os.remove(file)
             elif suffix == 'ogg':
-                print('ffmpeg -i "{}" -f mp3 "{}"'.format(file, name + ".mp3"))
-                os.system('ffmpeg -i "{}" -f mp3 "{}"'.format(file, name + ".mp3"))
+                os.system('ffmpeg -i "{}" -filter:a "atempo={}" -vn -f mp3 "{}"'
+                          .format(file, speed, name + ".mp3"))
                 os.remove(file)
-
-
 
 
 def zip_dir(dirpath, outname):

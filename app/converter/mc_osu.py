@@ -14,8 +14,8 @@ class BpmStamp(Comparable):
 
     def translate(self, context):
         return ",".join(list(map(lambda x: str(int(x)), [
-            0 if self.time == 0 else self.time - context['offset'],
-            60000 / self.bpm, 4, 2, 1, context['vol'], 1, 0])))
+            0 if self.time == 0 else calculate_time(self.time, context),
+            60000 / self.bpm / context['speed'], 4, 2, 1, context['vol'], 1, 0])))
 
 
 class NoteStamp(Comparable):
@@ -31,15 +31,18 @@ class NoteStamp(Comparable):
 
     def translate(self, context):
         return ",".join(list(map(lambda x: str(int(x)), [
-            (self.column * 2 + 1) * 64, 192, self.time - context['offset'],
+            (self.column * 2 + 1) * 64, 192, calculate_time(self.time, context),
             1 if self.end is None else 128, 0,
-            0 if self.end is None else self.endtime - context['offset']
+            0 if self.end is None else calculate_time(self.endtime, context)
         ]))) + ":0:0:0:0:"
 
 
-def mc_osu_v14(mc: str, od=8, hp=7, vol=70, keep_sv=True):
+def calculate_time(time, context):
+    return (time - context['offset']) / context['speed']
+
+def mc_osu_v14(mc: str, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     try:
-        context = {'OD': od, 'HP': hp, 'keep_sv': keep_sv, 'vol': vol}
+        context = {'OD': od, 'HP': hp, 'keep_sv': keep_sv, 'vol': vol, 'speed': speed}
         mc_json = json.loads(mc)
         gen_parse(mc_json, context)
         meta_parse(mc_json, context)
@@ -50,9 +53,10 @@ def mc_osu_v14(mc: str, od=8, hp=7, vol=70, keep_sv=True):
     except Exception as e:
         return e, False
 
-def fmc_osu_v14(in_file, out_file, od=8, hp=7, vol=70, keep_sv=True):
+
+def fmc_osu_v14(in_file, out_file, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     source = utils.read_file(in_file)
-    re = mc_osu_v14(source, od, hp, vol, keep_sv)
+    re = mc_osu_v14(source, od, hp, vol, keep_sv, speed)
     if re[1]:
         utils.write_file(re[0], out_file)
     else:
@@ -88,6 +92,8 @@ def meta_parse(mc: dict, context: dict):
     context['artist'] = meta['song']['artist']
     context['creator'] = meta['creator']
     context['version'] = meta['version']
+    if context['speed'] != 1:
+        context['version'] = context['version'] + " x{}".format(round(context['speed'], 2))
     context['column'] = meta['mode_ext']['column']
     context['bg'] = meta['background']
 
