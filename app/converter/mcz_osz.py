@@ -30,7 +30,7 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     for file in os.listdir(d):
         file = os.path.join(d, file)
         if os.path.isdir(file):
-            convert(file, od, hp, vol, keep_sv)
+            convert(file, od, hp, vol, keep_sv, speed)
         else:
             suffix = file.rsplit(".", 1)[-1]
             name = file.rsplit(".", 1)[0]

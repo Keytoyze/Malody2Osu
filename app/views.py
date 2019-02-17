@@ -33,14 +33,14 @@ def convert_map(request):
             conv.out_file = name + "." + out_suffix
             out_name = conv.get_absolute(conv.out_file)
             # TODO: OD/HP/SV/VOL/speed
-            mc_osu.fmc_osu_v14(in_name, out_name, speed=1.14514)
+            mc_osu.fmc_osu_v14(in_name, out_name)
 
         elif in_suffix == 'zip' or in_suffix == 'mcz':
             out_suffix = "osz"
             conv.out_file = name + "." + out_suffix
             out_name = conv.get_absolute(conv.out_file)
             # TODO: OD/HP/SV/VOL/speed
-            mcz_osz.mcz_osz_v14(in_name, out_name, speed=1.14514)
+            mcz_osz.mcz_osz_v14(in_name, out_name)
         else:
             raise Exception("谱面格式(%s)未被支持" % in_suffix)
         conv.result = True
