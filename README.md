@@ -1,13 +1,18 @@
 # Mania-Lab
 A set of tools about MUG mania maps.
 
-## DONE
+## Development
+- backend: Python 3 (django)
+- frontend: undetermined
+- dependency: django, ffmpeg
+
+## Done
 - convert mc/mcz into osu/osz
+- change the speed of maps
 - very very simple web interface
 
-## TODO
+## Todo
 - support more options about converting
 - support more maps type such as LR2, ett, RM...
-- change the speed of maps
 - convert into LN
 - nice web interface
