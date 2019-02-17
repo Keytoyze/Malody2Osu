@@ -43,7 +43,7 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
                     pass
                 finally:
                     os.remove(file)
-            elif suffix == 'ogg':
+            elif suffix == 'ogg' or (suffix == 'mp3' and speed != 1):
                 os.system('ffmpeg -i "{}" -filter:a "atempo={}" -vn -f mp3 "{}"'
                           .format(file, speed, name + ".mp3"))
                 os.remove(file)

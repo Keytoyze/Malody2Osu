@@ -1,16 +1,47 @@
 <!DOCTYPE html>
 <html lang="cn">
 <head>
- <meta charset="UTF-8">
- <title>界面简单粗暴但功能强大的转谱工具</title>
- <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
- </script>
+    <meta charset="UTF-8">
+    <title>界面简单粗暴但功能强大的转谱工具</title>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
 </head>
 <body>
 
 <form id="convert_form" enctype="multipart/form-data">
- {% csrf_token %}
- <input type="file" name="map" id="convert_file" accept=".mc, .mcz, .zip"/>
+    {% csrf_token %}
+    <div>
+        <label>
+            谱面文件：(mc, mcz, osu, osz, zip)<br>
+            <input type="file" name="map" id="convert_file"
+                   accept=".mc, .mcz, .zip, .osu, .osz"/><br><br>
+        </label>
+        <label>
+            OD：<br>
+            <input type="number" name="od" max="10" min="0" value="8"/>
+            <br><br>
+        </label>
+        <label>
+            HP：<br>
+            <input type="number" name="hp" max="10" min="0" value="7"/>
+            <br><br>
+        </label>
+        <label>
+            vol：<br>
+            <input type="number" name="vol" max="100" min="0" value="70"/>
+            <br><br>
+        </label>
+        <label>
+            倍速：<br>
+            <input type="number" name="vol" max="2" min="0.5" value="1.0"/>
+            <br><br>
+        </label>
+        <label>
+            <input type="checkbox" name="sv" checked="checked"/>
+            保留变速<br>
+        </label>
+    </div>
+
 </form>
 <button id="convert_button">一键转谱</button>
 <script>
@@ -47,7 +78,7 @@
 
   function download() {
     var voiceUrl = "/api/download?id=" + id;
-    var iframe  = document.createElement("iframe");
+    var iframe = document.createElement("iframe");
     document.body.appendChild(iframe);
     iframe.src = voiceUrl;
     iframe.style.display = "none";

@@ -9,7 +9,8 @@ from app.models import ConvModel
 # Create your views here.
 
 # api/upload: post
-# (map: file) -> {
+# {"map":file, "od"(0-10), "hp"(0-10), "sv"(on/none), "vol"(0-100), "speed"(0.5-2.0)}
+# -> {
 #     code: 1/0,
 #     msg: id/error
 # }
@@ -19,6 +20,7 @@ def convert_map(request):
     conv = ConvModel()
     try:
         obj = request.FILES.get("map")
+        print(request.POST)
         in_suffix = obj.name.split(".")[-1]
         name = obj.name.split(".")[0]
         # get id
