@@ -2,7 +2,7 @@ from django.http import *
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 
-from app.converter import mc_osu, mcz_osz
+from app.converter import mc_osu, osz, osu
 from app.models import ConvModel
 
 
@@ -30,19 +30,22 @@ def convert_map(request):
         with open(in_name, 'wb') as f:
             for line in obj.chunks():
                 f.write(line)
-        if in_suffix == 'mc':
+        if in_suffix == 'mc' or in_suffix == 'osu':
             out_suffix = "osu"
             conv.out_file = name + "." + out_suffix
             out_name = conv.get_absolute(conv.out_file)
             # TODO: OD/HP/SV/VOL/speed
-            mc_osu.fmc_osu_v14(in_name, out_name)
+            if in_suffix == 'mc':
+                mc_osu.fmc_osu_v14(in_name, out_name)
+            else:
+                osu.fosu_v14(in_name, out_name)
 
-        elif in_suffix == 'zip' or in_suffix == 'mcz':
+        elif in_suffix == 'zip' or in_suffix == 'mcz' or in_suffix == 'osz':
             out_suffix = "osz"
             conv.out_file = name + "." + out_suffix
             out_name = conv.get_absolute(conv.out_file)
             # TODO: OD/HP/SV/VOL/speed
-            mcz_osz.mcz_osz_v14(in_name, out_name)
+            osz.zip_osz_v14(in_name, out_name, speed=1.2, keep_sv=False)
         else:
             raise Exception("谱面格式(%s)未被支持" % in_suffix)
         conv.result = True

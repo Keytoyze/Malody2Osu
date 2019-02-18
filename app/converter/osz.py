@@ -1,15 +1,15 @@
 import zipfile
 import os
 import traceback
-from app.converter import mc_osu
+from app.converter import mc_osu, osu
 
 
-def mcz_osz_v14(mcz_path, osz_path, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
+def zip_osz_v14(zip_path, osz_path, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     global success_c
     try:
-        d = mcz_path.rsplit(".", 1)[0]
+        d = zip_path.rsplit(".", 1)[0]
         os.makedirs(d, exist_ok=True)
-        zipfile.ZipFile(mcz_path).extractall(d)
+        zipfile.ZipFile(zip_path).extractall(d)
 
         success_c = 0
         convert(d, od, hp, vol, keep_sv, speed)
@@ -36,7 +36,7 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
             name = file.rsplit(".", 1)[0]
             if suffix == 'mc':
                 try:
-                    mc_osu.fmc_osu_v14(file, name + ".osu", od, hp, vol, keep_sv, speed)
+                    mc_osu.fmc_osu_v14(file, name + "_lab.osu", od, hp, vol, keep_sv, speed)
                     success_c += 1
                 except Exception:
                     traceback.print_exc()
@@ -44,9 +44,20 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
                 finally:
                     os.remove(file)
             elif suffix == 'ogg' or (suffix == 'mp3' and speed != 1):
+                mp3_name = name + "_temp.mp3"
                 os.system('ffmpeg -i "{}" -filter:a "atempo={}" -vn -f mp3 "{}"'
-                          .format(file, speed, name + ".mp3"))
+                          .format(file, speed, mp3_name))
                 os.remove(file)
+                os.rename(mp3_name, file)
+            elif suffix == 'osu':
+                try:
+                    osu.fosu_v14(file, name + "_lab.osu", od, hp, vol, keep_sv, speed)
+                    success_c += 1
+                except Exception:
+                    traceback.print_exc()
+                    pass
+                finally:
+                    os.remove(file)
 
 
 def zip_dir(dirpath, outname):

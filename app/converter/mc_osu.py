@@ -93,7 +93,7 @@ def meta_parse(mc: dict, context: dict):
     context['creator'] = meta['creator']
     context['version'] = meta['version']
     if context['speed'] != 1:
-        context['version'] = context['version'] + " x{}".format(round(context['speed'], 5))
+        context['version'] = context['version'] + " x{}".format(round(context['speed'], 2))
     context['column'] = meta['mode_ext']['column']
     context['bg'] = meta['background']
 
