@@ -64,7 +64,7 @@ def fmc_osu_v14(in_file, out_file, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
 
 
 def translate(context):
-    bpm_list = context['bpm_list'] if context['keep_sv'] else context['bpm_list'][0]
+    bpm_list = context['bpm_list'] if context['keep_sv'] else context['bpm_list'][0:1]
     note_list = context['note_list']
     context['TP'] = "\n".join(list(map(lambda b: b.translate(context), bpm_list)))
     context['HO'] = "\n".join(list(map(lambda n: n.translate(context), note_list)))

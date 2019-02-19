@@ -1,6 +1,7 @@
-import zipfile
 import os
 import traceback
+import zipfile
+
 from app.converter import mc_osu, osu
 
 
