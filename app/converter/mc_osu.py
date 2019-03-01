@@ -13,7 +13,7 @@ class BpmStamp(Comparable):
         self.time = time
 
     def translate(self, context):
-        return ",".join(list(map(lambda x: str(int(x)), [
+        return ",".join(list(map(lambda x: str(int(float(x))), [
             0 if self.time == 0 else calculate_time(self.time, context),
             60000 / self.bpm / context['speed'], 4, 2, 1, context['vol'], 1, 0])))
 
@@ -30,7 +30,7 @@ class NoteStamp(Comparable):
         self.column = column
 
     def translate(self, context):
-        return ",".join(list(map(lambda x: str(int(x)), [
+        return ",".join(list(map(lambda x: str(int(float(x))), [
             (self.column * 2 + 1) * 64, 192, calculate_time(self.time, context),
             1 if self.end is None else 128, 0,
             0 if self.end is None else calculate_time(self.endtime, context)
@@ -39,6 +39,7 @@ class NoteStamp(Comparable):
 
 def calculate_time(time, context):
     return (time - context['offset']) / context['speed']
+
 
 def mc_osu_v14(mc: str, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
     try:
