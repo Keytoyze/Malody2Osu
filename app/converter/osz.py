@@ -48,8 +48,10 @@ def convert(d, od=8, hp=7, vol=70, keep_sv=True, speed=1.0):
                 mp3_name = name + "_temp.mp3"
                 os.system('ffmpeg -i "{}" -filter:a "atempo={}" -vn -f mp3 "{}"'
                           .format(file, speed, mp3_name))
+                if not os.path.exists(mp3_name):
+                    raise FileNotFoundError("fail to convert mp3 file")
                 os.remove(file)
-                os.rename(mp3_name, file)
+                os.rename(mp3_name, name + ".mp3")
             elif suffix == 'osu':
                 try:
                     osu.fosu_v14(file, name + "_lab.osu", od, hp, vol, keep_sv, speed)
