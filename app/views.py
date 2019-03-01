@@ -32,7 +32,7 @@ def convert_map(request):
         hp = request.POST.get('hp')
         sv = request.POST.get('sv') == 'on'
         vol = request.POST.get('vol')
-        speed = request.POST.get('speed', 1.0)
+        speed = float(request.POST.get('speed', 1.0))
 
         with open(in_name, 'wb') as f:
             for line in obj.chunks():
