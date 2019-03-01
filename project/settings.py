@@ -114,3 +114,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 FILES_DIR = os.path.join(BASE_DIR, "files")
+
+ALLOWED_HOSTS = ['*']

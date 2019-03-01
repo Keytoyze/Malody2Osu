@@ -14,3 +14,6 @@ migrations/
 # data
 *.sqlite3
 files/
+
+# deploy
+deploy/
